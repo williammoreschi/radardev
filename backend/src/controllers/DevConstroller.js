@@ -5,8 +5,19 @@ const parseStringAsArray = require('../utils/parseStringAsArray');
 module.exports = {
     async index(request,response){
         const devs = await Dev.find();
-
         return response.json(devs);
+    },
+
+    async update(request,response){
+        let {techs} = request.body;
+        request.body.techs = parseStringAsArray(techs);
+        const dev = await Dev.findByIdAndUpdate(request.params.id,request.body,{new:true});
+		return response.json(dev);
+    },
+
+    async destroy(request,response){
+        await Dev.findByIdAndDelete(request.params.id);
+        return response.send();
     },
 
     async store(request, response) {
